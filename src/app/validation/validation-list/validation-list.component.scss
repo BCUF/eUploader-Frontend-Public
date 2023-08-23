@@ -1,0 +1,54 @@
+@import "@angular/material/theming";
+
+table {
+    width: 100%;
+    // margin-bottom: 100px;
+}
+
+.container{
+    width: 80%;
+    margin: auto;
+}
+
+$warnPalette: mat-palette($mat-red);
+
+.validation-ok{
+    color: green;
+}
+.validation-nok{
+    color: mat-color($warnPalette);
+}
+.validation-default{
+    color: black;
+}
+
+.paginator{
+    margin-bottom: 50px;
+}
+
+.mat-input-element {
+    font-size: medium;
+    font-weight: 200;
+}
+
+.mat-toolbar-single-row {
+    height: auto !important;
+    background: transparent;
+    padding: 0;
+}
+
+.mat-toolbar-single-row button {
+    width: 100px;
+}
+
+.mat-form-field {
+    width: 100%;
+}
+
+.list-card {
+    margin-top: 20px;
+}
+
+.list-item {
+    margin-bottom: 20px;
+}

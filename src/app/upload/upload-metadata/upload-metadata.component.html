@@ -1,0 +1,72 @@
+<div *ngIf="upload && pipeline" class="container">
+
+    <div *ngIf="allFiles.length > 1" class="same-meta">
+        <mat-checkbox [(ngModel)]="upload.same_meta_for_each_file"
+            (change)="setSameMetaForEachFile($any($event))" [labelPosition]="'before'">Ajouter les mêmes metadata pour
+            tous les fichiers?</mat-checkbox>
+    </div>
+
+    <div *ngIf="upload.same_meta_for_each_file || allFiles.length == 1" class="mat-elevation-z8" style="width: 100%; padding-top: 30px;">
+        <app-metadata-form 
+            (hasBeenFilledEvent)="handleFormFilled($event)" [pipeline]="pipeline" [upload]="upload"
+            [file]="allFiles[0]" [isNextButton]="false"></app-metadata-form>
+    </div>
+
+    <div style="width: 100%; margin-top: 30px;" [hidden]="dataSource.data.length <= 0">
+
+        <h1>Liste des fichiers</h1>
+
+        <mat-form-field style="width: 100%" appearance="standard">
+            <mat-label>Filtre</mat-label>
+            <input matInput (keyup)="applyFilter($event)" type="text" [(ngModel)]="filterValue"
+                placeholder="Nom du fichier, type, etc..." #input>
+            <button *ngIf="filterValue" matSuffix mat-icon-button aria-label="Clear"
+                (click)="filterValue='';dataSource.filter=''">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+
+        <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
+            class="mat-elevation-z8">
+
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+                    Fichier
+                </th>
+                <td mat-cell *matCellDef="let file">
+                    <span>{{ file.name }}</span>
+                </td>
+
+            </ng-container>
+
+            <ng-container matColumnDef="isComplete">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by isComplete">
+                    Formulaire completé
+                </th>
+                <td mat-cell *matCellDef="let file">
+                    <mat-icon *ngIf="file.isComplete">check</mat-icon>
+                    <mat-icon *ngIf="!file.isComplete">close</mat-icon>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fill">
+                <th mat-header-cell [hidden]="upload.same_meta_for_each_file || (!upload.same_meta_for_each_file && upload.files.length == 1)" *matHeaderCellDef>
+                    Remplir?
+                </th>
+                <td mat-cell [hidden]="upload.same_meta_for_each_file || (!upload.same_meta_for_each_file && upload.files.length == 1)" *matCellDef="let file">
+                    <button mat-raised-button color="primary" (click)="edit(file)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator class="paginator mat-elevation-z8" [length]="dataSource.data.length" [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions" (page)="pageEvent = $event" aria-label="Select page">
+        </mat-paginator>
+    </div>
+
+</div>

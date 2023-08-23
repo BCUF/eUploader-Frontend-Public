@@ -1,0 +1,28 @@
+<div class="authentication-card-container">
+    <mat-card class="authentication-card">
+        <mat-card-header>
+            <mat-card-title>Login</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <form [formGroup]="loginForm">
+                <mat-form-field>
+                    <mat-label>Username</mat-label>
+                    <input id="username" matInput formControlName="username" />
+                </mat-form-field>
+                <br/>
+                <mat-form-field>
+                    <mat-label>Password</mat-label>
+                    <input matInput id="password" type="password" formControlName="password" autocomplete="on"/>
+                </mat-form-field>
+            </form>
+            <div class="error" *ngIf="errorMessage">
+                {{ errorMessage }}
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button #submitBtn mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!loginForm.valid">
+                Login
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</div>

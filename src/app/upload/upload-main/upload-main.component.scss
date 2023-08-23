@@ -1,0 +1,28 @@
+.step-container{
+    width: 80%;
+    margin: auto;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.current-lang{
+    color: bisque;
+}
+
+a{
+    cursor: pointer;
+}
+
+.next-2-btn {
+    width: 100%;
+    display: flex; 
+    justify-content: space-between;
+}
+
+.next-1-btn {
+    width: 100%;
+    display: flex; 
+    justify-content: flex-end;
+}

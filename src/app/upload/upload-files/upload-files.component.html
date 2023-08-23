@@ -1,0 +1,115 @@
+<div *ngIf="upload">
+
+    <app-dialog-spinner *ngIf="uploading"></app-dialog-spinner>
+
+    <div *ngIf="allFiles.length <= 0" class="dropzone mat-elevation-z8 text-center" appFileDropzone (onFileDropped)="droppedFiles($any($event))">
+        <!-- <div>
+            <h1>Drag n Drop Zone</h1>
+        </div> -->
+        <div>
+            <mat-icon style="width: 4rem; height: 4rem; font-size: 4rem" class="icon-display" fontIcon="upload_file"></mat-icon>
+        </div>
+        <div>
+            <p *ngIf="pipeline">Ajouté des fichiers de type {{ allowed_mimes.toString().split(',').join(', ') }} avec une taille maximal
+                de {{ formatBytes(pipeline.max_size_in_byte, 2) }}</p>
+        </div>
+        <div>
+            <button mat-raised-button color="primary" (click)="browseFiles()">Ajouter des fichiers
+                <input id="input-file" type="file" style="display:none" (change)="handleFilesFromInput($event)"
+                    accept="allowed_mimes" multiple>
+            </button>
+        </div>
+    </div>
+
+    <div class="add-file-btn-container" *ngIf="allFiles.length > 0">
+        <button  mat-raised-button color="primary" (click)="browseFiles()">Ajouter des fichiers
+            <input id="input-file" type="file" style="display:none" (change)="handleFilesFromInput($event)"
+                    [accept]="[allowed_mimes]" multiple>
+        </button>
+    </div>
+
+
+    <div [hidden]="dataSource.data.length <= 0">
+
+        <h1>Liste des fichiers</h1>
+
+        <mat-form-field appearance="standard">
+            <mat-label>Filtre</mat-label>
+            <input matInput (keyup)="applyFilter($event)" type="text" [(ngModel)]="filterValue" placeholder="Nom du fichier, type, etc..." #input>
+            <button *ngIf="filterValue" matSuffix mat-icon-button aria-label="Clear" (click)="filterValue='';dataSource.filter=''">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        
+
+        <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
+            class="mat-elevation-z8">
+
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+                    Fichier
+                </th>
+                <td mat-cell *matCellDef="let file">
+                    <span>{{ file.name }}</span>
+                </td>
+                
+            </ng-container>
+
+            <ng-container matColumnDef="size">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by size">
+                    Taille
+                </th>
+                <td mat-cell *matCellDef="let file"> {{ file.display_size }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="type">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by type">
+                    Type
+                </th>
+                <td mat-cell *matCellDef="let file"> {{ file.type }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="progression">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by progression">
+                    Progression
+                </th>
+                <td mat-cell *matCellDef="let file" [ngSwitch]="file.progression">
+                    <ng-container *ngSwitchCase="0">
+                        <mat-icon>close</mat-icon>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="100">
+                        <mat-icon >check</mat-icon>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                        {{ file.progression }} %
+                    </ng-container>
+                </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef>
+                    Supprimer?
+                </th>
+                <td mat-cell *matCellDef="let file">
+                    <button mat-raised-button color="primary" (click)="deleteDialog(file)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator class="paginator mat-elevation-z8"
+            [length]="dataSource.data.length"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions"
+            (page)="pageEvent = $event"
+            aria-label="Select page">
+        </mat-paginator>
+    </div>
+
+    
+</div>

@@ -1,0 +1,82 @@
+.progress-bar {
+    padding: 0;
+}
+
+.progress {
+    width: 50px;
+}
+
+.add-file-btn-container{
+    width: 100%;
+    display: flex; 
+    justify-content: center;
+    margin: 30px;
+}
+
+table {
+    width: 100%;
+}
+
+.like-link{
+    cursor: pointer;
+    color:blue;
+    text-decoration:underline;
+}
+
+.like-link:hover {
+    text-decoration:none;
+    text-shadow: 1px 1px 1px #555;
+}
+
+.paginator{
+    margin-bottom: 50px;
+}
+
+.dropzone{
+    background-color: rgb(200, 200, 200);
+    padding: 50px;
+    margin: 50px;
+    height: 400px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+ }
+
+.mat-input-element {
+    font-size: medium;
+    font-weight: 200;
+}
+
+.mat-toolbar-single-row {
+    height: auto !important;
+    background: transparent;
+    padding: 0;
+}
+
+.mat-toolbar-single-row button {
+    width: 100px;
+}
+
+.mat-form-field {
+    width: 100%;
+}
+
+.error-message {
+    background-color: #ddd;
+    padding: 15px;
+    color: #ff0000;
+    border: #aaa solid 1px;
+    border-radius: 4px;
+    margin: 15px 0;
+}
+
+.list-card {
+    margin-top: 20px;
+}
+
+.list-item {
+    margin-bottom: 20px;
+}
+

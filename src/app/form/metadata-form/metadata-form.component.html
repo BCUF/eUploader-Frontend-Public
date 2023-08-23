@@ -1,0 +1,82 @@
+<div class="form-view">
+
+    <form [formGroup]="metadataForm">
+        <div class="form-grid">
+
+            <div *ngFor="let field of pipeline.fields">
+                <div [ngSwitch]="field.type">
+
+                    <div *ngSwitchCase="'TEXT'">
+                        <mat-form-field matTooltip="{{ field.description }}" [matTooltipPosition]="'above'" appearance="fill">
+                            <mat-label>{{ field.label || field.key }} <b><i>{{field.groupe_scope_name}}</i></b></mat-label>
+                            <input matInput type="text" formControlName="{{ field.key }}" />
+                        </mat-form-field>
+                    </div>
+
+                    <div *ngSwitchCase="'TEXT_AREA'">
+                        <mat-form-field matTooltip="{{ field.description }}" [matTooltipPosition]="'above'" appearance="fill">
+                            <mat-label>{{ field.label || field.key }} <b><i>{{field.groupe_scope_name}}</i></b></mat-label>
+                            <textarea matInput formControlName="{{ field.key }}"></textarea>
+                        </mat-form-field>
+                    </div>
+
+                    <div *ngSwitchCase="'NUMBER'">
+                        <mat-form-field matTooltip="{{ field.description }}" [matTooltipPosition]="'above'" appearance="fill">
+                            <mat-label>{{ field.label || field.key }} <b><i>{{field.groupe_scope_name}}</i></b></mat-label>
+                            <input matInput type="number" formControlName="{{ field.key }}" />
+                        </mat-form-field>
+                    </div>
+
+                    <div *ngSwitchCase="'DATE'">
+                        <mat-form-field matTooltip="{{ field.description }}" [matTooltipPosition]="'above'" appearance="fill">
+                            <mat-label>{{ field.label || field.key }} <b><i>{{field.groupe_scope_name}}</i></b></mat-label>
+                            <input matInput [matDatepicker]="picker" formControlName="{{ field.key }}" />
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div *ngSwitchCase="'TIME'">
+                        <mat-form-field matTooltip="{{ field.description }}" [matTooltipPosition]="'above'" appearance="fill">
+                            <mat-label>{{ field.label || field.key }} <b><i>{{field.groupe_scope_name}}</i></b></mat-label>
+                            <input matInput type="time" formControlName="{{ field.key }}" step="1"/>
+                        </mat-form-field>
+                    </div>
+
+                    <div *ngSwitchCase="'DURATION'">
+                        <mat-form-field matTooltip="{{ field.description }}" [matTooltipPosition]="'above'" appearance="fill">
+                            <mat-label>{{ field.label || field.key }} <b><i>{{field.groupe_scope_name}}</i></b></mat-label>
+                            <input matInput type="text" formControlName="{{ field.key }}" pattern="^\d+:([0-5]?[0-9])(:([0-5]?[0-9]))*$"/>
+                        </mat-form-field>
+                    </div>
+
+                    <div *ngSwitchCase="'SELECT'">
+                        <mat-form-field matTooltip="{{ field.description }}" [matTooltipPosition]="'above'" appearance="fill">
+                            <mat-label>{{ field.label || field.key }} <b><i>{{field.groupe_scope_name}}</i></b></mat-label>
+                            <mat-select formControlName="{{ field.key }}">
+                                <mat-option *ngIf="field.required" [value]="" disabled>---</mat-option>
+                                <mat-option *ngIf="!field.required" [value]="">---</mat-option>
+                                <mat-option *ngFor="let option of field.options" [value]="option.value"> {{option.value}} </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div *ngSwitchCase="'CHECKBOX'">
+                        <mat-form-field matTooltip="{{ field.description }}" [matTooltipPosition]="'above'" appearance="fill">
+                            <mat-label>{{ field.label || field.key }} <b><i>{{field.groupe_scope_name}}</i></b></mat-label>
+                            <mat-select formControlName="{{ field.key }}" multiple>
+                                <mat-option *ngFor="let option of field.options" [value]="option.value">{{option.value}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div> 
+        </div>
+
+        <div *ngIf="!readOnly" class="save-btn">
+            <button mat-raised-button color="primary" (click)="saveMetadata(metadataForm.value, false)" [disabled]="!metadataForm.valid">Sauvegarder</button>
+            <button *ngIf="isNextButton" mat-raised-button color="secondary" (click)="saveMetadata(metadataForm.value, true)" [disabled]="!metadataForm.valid">Suivant</button>
+        </div>
+        
+    </form>
+</div>

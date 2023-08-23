@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>
+    {{ title }}
+</h1>
+
+<div mat-dialog-content>
+    {{ message }}
+</div>
+
+<div mat-dialog-actions align="center">
+    <button *ngIf="btnActionFalseName" mat-raised-button (click)="onDismiss()">{{ btnActionFalseName  }}</button>
+    <button *ngIf="btnActionNOKName" mat-raised-button color="accent" (click)="onRefuse()">{{ btnActionNOKName  }}</button>
+    <button *ngIf="btnActionTrueName" mat-raised-button color="primary" cdkFocusInitial (click)="onConfirm()">{{ btnActionTrueName }}</button>
+</div>

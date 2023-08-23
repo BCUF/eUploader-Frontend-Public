@@ -1,0 +1,16 @@
+<div style="width: 100%;">
+    <form [formGroup]="createNoteForm" autocomplete="off" novalidate (ngSubmit)="createNote(createNoteForm.value)">
+        <mat-form-field class="note-input">
+            <textarea matInput minlength="1" type="text" placeholder="Ajouter une note ici" formControlName="text" id="text"></textarea>
+        </mat-form-field>
+        <button mat-raised-button color="primary" [disabled]="createNoteForm.value.text <= 0">Add</button>
+    </form>
+    <mat-card *ngFor="let note of notes">
+        <mat-card-header>
+            <mat-card-subtitle>Commenté par <b>{{ note.user }}</b> <i>{{ toDate(note.created) }}</i></mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <p>{{ note.note }}</p>
+        </mat-card-content>
+    </mat-card>
+</div>

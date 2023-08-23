@@ -1,0 +1,4 @@
+<div class="dialog-window">
+    <h2 *ngIf="filename">{{filename}}</h2>
+    <app-metadata-form (hasBeenFilledEvent)="handleFormFilled($event)" [readOnly]="readOnly" [pipeline]="pipeline" [upload]="upload" [file]="file" [isNextButton]="true" [validation]="validation" [userScopes]="userScopes"></app-metadata-form>
+</div>

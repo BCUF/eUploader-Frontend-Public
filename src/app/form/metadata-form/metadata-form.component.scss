@@ -1,0 +1,94 @@
+.form-view {
+    width: 100%;
+    padding: 1%;
+    // margin: 10%;
+    // height: 600px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap; //fxLayout
+    border: none;
+    // // box-sizing: border-box;
+    // align-content: stretch; // fxLayoutAlign
+    // align-items: stretch; // fxLayoutAlign
+    // justify-content: flex-start; // fxLayoutAlign
+}
+
+// .field{
+//     width: 100%;
+//     display: flex;
+//     flex-direction: row;
+//     flex-wrap: wrap; //fxLayout
+//     box-sizing: border-box;
+//     align-content: stretch; // fxLayoutAlign
+//     align-items: stretch; // fxLayoutAlign
+//     justify-content: flex-start; // fxLayoutAlign
+// }
+
+form{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.form-grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1%;
+    // padding: 4px;
+    // grid-auto-rows: minmax(100px, auto);
+    // flex-direction: column;
+    // grid-auto-flow: column;
+    width: 80%;
+    margin: auto;
+}
+
+// .form-view div {
+//     width: 100%;
+// }
+
+// .radio-group {
+//     display: flex;
+//     flex-direction: column;
+//     margin: 15px 0;
+//     align-items: flex-start;
+// }
+  
+// .radio-button {
+//     margin: 5px;
+// }
+
+mat-form-field {
+    width: 100%;
+    // padding: 1%;
+    margin: auto;
+    // overflow: hidden;
+    // width: 40%;
+}
+
+.save-btn{
+    // display: flex;
+    // flex-direction: row;
+    // flex-wrap: wrap; //fxLayout
+//     box-sizing: border-box;
+    // align-content: center; // fxLayoutAlign
+    text-align: center;
+    margin: 30px;
+    // gap: 30px;
+    // margin-top: 10%;
+    // grid-column-start: 1;
+    // grid-column-end: 2;
+}
+
+.save-btn button {
+    width : 10em;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+input:disabled {
+    color: black;
+}
+  
+select:disabled {
+    color: black;
+}
