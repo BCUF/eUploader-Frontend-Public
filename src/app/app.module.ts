@@ -64,6 +64,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { ValidationListComponent } from './validation/validation-list/validation-list.component';
 import { ValidationUploadComponent } from './validation/validation-upload/validation-upload.component';
 import { NoteComponent } from './validation/note/note.component';
+import { HeaderComponent } from './common/header/header.component';
 
 
 const materialModules = [
@@ -109,7 +110,8 @@ const materialModules = [
         LoginComponent,
         ValidationListComponent,
         ValidationUploadComponent,
-        NoteComponent
+        NoteComponent,
+        HeaderComponent
     ],
     imports: [
         BrowserModule,
