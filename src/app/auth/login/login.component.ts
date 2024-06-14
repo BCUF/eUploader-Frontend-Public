@@ -41,6 +41,8 @@ export class LoginComponent implements OnInit {
     constructor(private authService: AuthService, private router: Router) { }
 
     ngOnInit() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
         this.errorMessage = "";
         this.loginForm = new FormGroup({
             username: new FormControl('', Validators.required),
