@@ -13,7 +13,7 @@
 */
 
 import { Upload } from "./upload";
-import { ValidatorGroups } from "./validator-groups";
+import { Group } from "./group";
 import { Workflow } from "./workflow";
 
 export class Validation {
@@ -21,7 +21,7 @@ export class Validation {
     state: ValidationStatus;
     upload: Upload;
     workflow: Workflow;
-    group: number | ValidatorGroups;
+    group: number | Group;
     validated_by?: string;
     same_upload_validations?: Validation[];
     final_validation?: ValidationStatus;
@@ -35,6 +35,7 @@ export enum ValidationStatus {
 }
 
 export class GroupStates {
+    name: string;
     description?: string;
     state?: ValidationStatus;
 }

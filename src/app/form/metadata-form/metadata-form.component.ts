@@ -139,7 +139,7 @@ export class MetadataFormComponent implements OnInit {
                 if(field.required && this.canEdit(field)){
                     validators.push(Validators.required)
                 }
-                let date = (isNaN(field.default_value) && !isNaN(Date.parse(field.default_value))) ? (field.default_value ? new Date(field.default_value) : '') : '';
+                let date = (isNaN(field.default_value) && !isNaN(Date.parse(field.default_value))) ? (field.default_value ? new Date(field.default_value): (field.required ? new Date(): '')): (field.required ? new Date(): '');
                 for(let metadata of this.file.values as Metadata[]){
                     if(field.key == metadata.key){
                         let dateValues = metadata.value.split(" ")[0].split("-");

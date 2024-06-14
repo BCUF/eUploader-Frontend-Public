@@ -3,11 +3,9 @@
     <div class="row">
         <div class="column col-left">
 
-            <div *ngIf="allFiles.length > 1 && !readOnly" class="same-meta">
+            <div *ngIf="pipeline.can_edit_same_metadata_for_each_file && allFiles.length > 1 && !readOnly" class="same-meta">
                 <mat-checkbox [(ngModel)]="upload.same_meta_for_each_file"
-                    (change)="setSameMetaForEachFile($any($event))" [labelPosition]="'before'">Ajouter les mêmes
-                    metadata pour
-                    tous les fichiers?</mat-checkbox>
+                    (change)="setSameMetaForEachFile($any($event))" [labelPosition]="'before'">{{ 'UPLOAD.ADD_SAME_META' | translate }}</mat-checkbox>
             </div>
 
             <div *ngIf="upload.same_meta_for_each_file || allFiles.length == 1" class="mat-elevation-z8"
@@ -19,12 +17,12 @@
 
             <div style="width: 100%; margin-top: 30px;" [hidden]="dataSource.data.length <= 0">
 
-                <h1>Liste des fichiers</h1>
+                <h1>{{ 'UPLOAD.FILE_LIST' | translate }}</h1>
 
                 <mat-form-field style="width: 100%" appearance="standard">
-                    <mat-label>Filtre</mat-label>
+                    <mat-label>{{ 'UPLOAD.FILTER' | translate }}</mat-label>
                     <input matInput (keyup)="applyFilter($event)" type="text" [(ngModel)]="filterValue"
-                        placeholder="Nom du fichier, type, etc..." #input>
+                        placeholder="{{'UPLOAD.FILTER_PLACEHOLDER' | translate}}" #input>
                     <button *ngIf="filterValue" matSuffix mat-icon-button aria-label="Clear"
                         (click)="filterValue='';dataSource.filter=''">
                         <mat-icon>close</mat-icon>
@@ -36,7 +34,7 @@
 
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
-                            Fichier
+                            {{ 'UPLOAD.FILE' | translate }}
                         </th>
                         <td mat-cell *matCellDef="let file">
                             <!-- <span>{{ file.name }}</span> -->
@@ -48,7 +46,7 @@
                     <ng-container matColumnDef="isComplete">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header
                             sortActionDescription="Sort by isComplete">
-                            Formulaire completé
+                            {{ 'UPLOAD.FORM_COMPLETE' | translate }}
                         </th>
                         <td mat-cell *matCellDef="let file">
                             <mat-icon *ngIf="file.isComplete">check</mat-icon>
@@ -60,7 +58,7 @@
                         <th mat-header-cell
                             [hidden]="upload.same_meta_for_each_file || (!upload.same_meta_for_each_file && upload.files.length == 1)"
                             *matHeaderCellDef>
-                            Remplir?
+                            {{ 'UPLOAD.FILL' | translate }}
                         </th>
                         <td mat-cell
                             [hidden]="upload.same_meta_for_each_file || (!upload.same_meta_for_each_file && upload.files.length == 1)"
@@ -88,10 +86,10 @@
         <div class="column col-right">
 
             <div class="validations-btns">
-                <button style="margin-right: 4em;" mat-raised-button (click)="cancel()" color="primary">Retour</button>
+                <button style="margin-right: 4em;" mat-raised-button (click)="cancel()" color="primary">{{ 'VALIDATION.RETURN' | translate }}</button>
                 <button *ngIf="!readOnly" style="margin-right: 2em;" mat-raised-button (click)="validate(true)"
-                    [disabled]="!uploadIsValid" color="accent">Valider</button>
-                <button *ngIf="!readOnly" mat-raised-button (click)="validate(false)" color="warn">Refuser</button>
+                    [disabled]="!uploadIsValid" color="accent">{{ 'VALIDATION.VALIDATE' | translate }}</button>
+                <button *ngIf="!readOnly" mat-raised-button (click)="validate(false)" color="warn">{{ 'VALIDATION.REJECT' | translate }}</button>
             </div>
 
             <app-note style="margin-top: 50px; margin-bottom: 50px; width: 100%" [uploadId]="validation.upload.id"

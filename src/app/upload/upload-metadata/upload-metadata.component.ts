@@ -29,6 +29,7 @@ import { Dialog } from '@angular/cdk/dialog';
 import { FormDialogComponent, FormDialogModel } from 'src/app/utils/form-dialog/form-dialog.component';
 import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/utils/confirm-dialog/confirm-dialog.component';
 import { Validation } from 'src/app/data/validation';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-upload-metadata',
@@ -81,12 +82,12 @@ export class UploadMetadataComponent implements OnInit {
         this.dataSource.sort = this.sort;
     }
 
-    pageSize = 10;
-    pageSizeOptions: number[] = [5, 10, 25, 100];
+    pageSize = 50;
+    pageSizeOptions: number[] = [5, 10, 25, 50, 100];
     pageEvent: PageEvent;
 
     constructor(private fileService: FileService, private uploadService: UploadService,
-        private _liveAnnouncer: LiveAnnouncer, public dialog: Dialog) { }
+        private _liveAnnouncer: LiveAnnouncer, public dialog: Dialog, public translate: TranslateService) { }
 
     ngOnInit(): void {
         this.filterValue = "";
@@ -95,7 +96,6 @@ export class UploadMetadataComponent implements OnInit {
 
 
     setSameMetaForEachFile(event: any){
-        console.log(event.checked)
         if (this.upload){
             this.uploadService.setSameMetaForEachFile(this.upload.id, event.checked).subscribe((data: Upload) => {
                 this.upload = { ...data };
@@ -119,7 +119,6 @@ export class UploadMetadataComponent implements OnInit {
                 this.confirmDialog();
             }
         }
-       
         console.log(`saved: ${event.saved}`);
         if(this.upload.same_meta_for_each_file){
             for(let file of this.allFiles){
@@ -177,17 +176,24 @@ export class UploadMetadataComponent implements OnInit {
             mfw.values = file.values;
             mfw.isComplete = file.values.length > 0;
         }
-           
         return mfw;
     }
 
     confirmDialog(): void {
-        const message = "Cliquer sur terminer pour confirmer l'upload";
+        // const message = "Cliquer sur terminer pour confirmer l'upload";
 
-        const finishWord = this.validation? "Valider" : "Terminer";
+        // this.translate.instant('ERROR.INVALID_TOKEN');
+
+        const finishWord = this.validation? this.translate.instant('VALIDATION.VALIDATION') : this.translate.instant('COMMON.TERMINATE');
         const refuseWord = this.validation? "NOK" : "";
     
-        const dialogData = new ConfirmDialogModel("Confirmation", message, finishWord, "Modifier", refuseWord);
+        const dialogData = new ConfirmDialogModel(
+            this.translate.instant('FORM.CONFIRM'), 
+            this.translate.instant('UPLOAD.CONFIRM_END'),
+            finishWord, 
+            this.translate.instant('FORM.EDIT'), 
+            refuseWord
+        );
     
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
             // height: '400px',

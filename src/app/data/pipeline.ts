@@ -18,6 +18,8 @@ import { Mime } from "./mime";
 export class PipelineBase{
     id: number;
     name: string;
+    default_same_metadata_for_each_file: boolean;
+    can_edit_same_metadata_for_each_file: boolean;
 }
 
 export class Pipeline extends PipelineBase{

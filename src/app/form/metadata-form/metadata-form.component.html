@@ -74,8 +74,8 @@
         </div>
 
         <div *ngIf="!readOnly" class="save-btn">
-            <button mat-raised-button color="primary" (click)="saveMetadata(metadataForm.value, false)" [disabled]="!metadataForm.valid">Sauvegarder</button>
-            <button *ngIf="isNextButton" mat-raised-button color="secondary" (click)="saveMetadata(metadataForm.value, true)" [disabled]="!metadataForm.valid">Suivant</button>
+            <button mat-raised-button color="primary" (click)="saveMetadata(metadataForm.value, false)" [disabled]="!metadataForm.valid">{{ 'FORM.SAVE' | translate }}</button>
+            <button *ngIf="isNextButton" mat-raised-button color="secondary" (click)="saveMetadata(metadataForm.value, true)" [disabled]="!metadataForm.valid">{{ 'COMMON.NEXT' | translate }}</button>
         </div>
         
     </form>

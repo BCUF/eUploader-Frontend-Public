@@ -9,8 +9,15 @@ sudo git clone https://github.com/BCUF/eUploader-Frontend.git
 cd eUploader-Frontend
 npm install -g @angular/cli@14.2.10 
 npm install
-ng serve
 ```
+
+## Build for prod
+after install, set the server url in environment.prod.ts then:
+```bash
+ng build --output-hashing none
+node html_to_django.js
+```
+the last command will convert index.html for django template static files
 
 ## Development server
 

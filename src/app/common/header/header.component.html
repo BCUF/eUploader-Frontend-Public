@@ -5,10 +5,25 @@
         <span class="spacer"></span>
         <span>{{ user.username }}</span>
         <span class="spacer"></span>
-        <div>
-            <a [ngClass]="lang=='fr' ? 'current-lang' : ''" (click)="setLang('fr')">FR</a>
-            <a [ngClass]="lang=='de' ? 'current-lang' : ''" style="margin-left: 1rem;" (click)="setLang('de')">DE</a>
-        </div>
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+
+            <button mat-menu-item [matMenuTriggerFor]="lang">
+                <mat-icon>public</mat-icon>
+                <span>{{ 'HEADER.LANGUAGES' | translate }}</span>
+            </button>
+
+            <mat-menu #lang="matMenu">
+
+
+                <button *ngFor="let lang of translate.getLangs()" mat-menu-item (click)="setLang(lang)">
+                    <span *ngIf="currentLang==lang"><b>{{ lang }}</b></span>
+                    <span *ngIf="currentLang!=lang">{{ lang }}</span>
+                </button>
+            </mat-menu>
+        </mat-menu>
     </ng-container>
     <ng-container *ngIf="currentUrl.startsWith('/validation')">
         <span>eUploader</span>
@@ -19,17 +34,19 @@
         <mat-menu #menu="matMenu">
             <button mat-menu-item (click)="logout()">
                 <mat-icon>logout</mat-icon>
-                <span>Déconnexion</span>
+                <span>{{ 'HEADER.LOGOUT' | translate }}</span>
             </button>
 
             <button mat-menu-item [matMenuTriggerFor]="lang">
                 <mat-icon>public</mat-icon>
-                <span>Langues</span>
+                <span>{{ 'HEADER.LANGUAGES' | translate }}</span>
             </button>
 
             <mat-menu #lang="matMenu">
-                <button mat-menu-item (click)="setLang('fr')">FR</button>
-                <button mat-menu-item (click)="setLang('de')">DE</button>
+                <button *ngFor="let lang of translate.getLangs()" mat-menu-item (click)="setLang(lang)">
+                    <span *ngIf="currentLang==lang"><b>{{ lang }}</b></span>
+                    <span *ngIf="currentLang!=lang">{{ lang }}</span>
+                </button>
             </mat-menu>
         </mat-menu>
         <span >{{ user.username }}</span>

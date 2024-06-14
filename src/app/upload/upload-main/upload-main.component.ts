@@ -33,6 +33,7 @@ import { Utils } from 'src/app/utils/utils';
 import { Dialog, DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/utils/confirm-dialog/confirm-dialog.component';
 import { MatStepper } from '@angular/material/stepper';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-upload-main',
@@ -64,7 +65,7 @@ export class UploadMainComponent implements OnInit {
     constructor(private fileService: FileService, private uploadService: UploadService,
         private route: ActivatedRoute, private userService: UserService, private pipelineService: PipelineService, 
         private _liveAnnouncer: LiveAnnouncer, private router: Router, public dialog: Dialog, 
-        private ngZone: NgZone, private changeDetector: ChangeDetectorRef) { }
+        private ngZone: NgZone, private changeDetector: ChangeDetectorRef, public translate: TranslateService) { }
 
     ngOnInit() {
         this.errorMessage = "";
@@ -82,18 +83,17 @@ export class UploadMainComponent implements OnInit {
                 this.getUser();
             }
         });
+
+        this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+            if(this.user?.pipeline){
+                this.getPipeline(this.user?.pipeline)
+            }
+        });
+
     }
 
     ngAfterContentChecked(): void {
         this.changeDetector.detectChanges();
-    }
-
-    setLang(lang: string){
-        this.lang = lang;
-        localStorage.setItem('lang', lang);
-        if(this.user?.pipeline){
-            this.getPipeline(this.user?.pipeline)
-        }
     }
 
     getUser() {
@@ -105,7 +105,7 @@ export class UploadMainComponent implements OnInit {
                 }
             },
             error: (error) => {
-                this.errorMessage = "unvalid token, please contact the helpdesk";
+                this.errorMessage = this.translate.instant('ERROR.INVALID_TOKEN');
             }
         });
     }
@@ -128,33 +128,15 @@ export class UploadMainComponent implements OnInit {
                 this.getPipeline(this.user?.pipeline)
             }
             else{
-                this.dataLoaded = true;
-                // if(this.upload.status === Status.FILE_UPLOADED || (this.upload.status === Status.INIT && this.upload.files.length > 0)){
-                //     this.goToNextStep();
-                // }
-                
-            }
-
-            // if(this.upload.status === Status.INIT && this.upload.files.length > 0){
-            //     console.log("SHOULD LOAD FILES")
-            // }
-            // if (this.upload.status === Status.FILE_UPLOADED){
-            //     this.goToNextStep();
-            // }
-
-            
+                this.dataLoaded = true;                
+            }            
         })
     }
-
-    // ngAfterViewInit() {
-    //     console.log("afterview init")
-    // }
 
     handleFileUploadStepComplete(event: any){
         console.log(event)
         this.filesUploaded = event.isComplete;
 
-       
         if(event.noMoreFiles) { 
             console.log("noMoreFiles CASE")
             this.initUpload();
@@ -177,7 +159,6 @@ export class UploadMainComponent implements OnInit {
         if(event.wantGoNext){
             this.metadataUploaded = true;
             this.finishStep();
-            // this.setMetadataUploadedStatusAndGoNext();
         }
         else{
             this.metadataUploaded = event.isComplete;

@@ -18,6 +18,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { User } from 'src/app/data/user';
 import { UserService } from 'src/app/services/user.service';
 import { filter } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-header',
@@ -26,32 +27,31 @@ import { filter } from 'rxjs/operators';
 })
 export class HeaderComponent implements OnInit {
 
-  
-    lang: string;
+    currentLang: string;
     user: User;
     token: any;
     errorMessage: string;
     currentUrl: string;
 
-    constructor(public router: Router, public userService: UserService, public authService: AuthService){
+    constructor(public router: Router, public userService: UserService, public authService: AuthService, public translate: TranslateService){
         this.router.events.pipe(
             filter((event: any) => event instanceof NavigationEnd)
         ).subscribe(x => this.currentUrl = x.url)
     }
-    
 
     ngOnInit() {
         this.errorMessage = "";
         this.token = localStorage.getItem("token");
-        this.lang = localStorage.getItem("lang") || "fr";
+        this.currentLang = localStorage.getItem("lang") || "fr";
+        this.translate.use(this.currentLang)
         this.getUser();
     }
 
     setLang(lang: string){
-        if(lang != this.lang){
-            this.lang = lang;
+        if(lang != this.currentLang){
+            this.currentLang = lang;
             localStorage.setItem('lang', lang);
-            window.location.reload();
+            this.translate.use(lang);
         }
     }
 
@@ -64,7 +64,7 @@ export class HeaderComponent implements OnInit {
                 }
             },
             error: (error) => {
-                this.errorMessage = "unvalid token, please contact the helpdesk";
+                this.errorMessage = this.translate.instant('ERROR.INVALID_TOKEN');
             }
         });
     }

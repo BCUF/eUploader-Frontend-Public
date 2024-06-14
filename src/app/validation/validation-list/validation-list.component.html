@@ -2,7 +2,7 @@
 <div class="container">
     <div>
 
-        <h1>Liste des validations</h1>
+        <h1>{{ 'VALIDATION.LIST' | translate }}</h1>
 
         <table mat-table [dataSource]="dataSource" matSort matSortDisableClear matSortActive="-upload__uploaded_at" matSortStart="asc" (matSortChange)="announceSortChange($event)"
             class="mat-elevation-z8">
@@ -26,14 +26,14 @@
 
             <ng-container matColumnDef="uploaded_by">
                 <th mat-header-cell *matHeaderCellDef>
-                    téléversé par
+                    {{ 'VALIDATION.UPLOAD_BY' | translate }}
                 </th>
                 <td mat-cell *matCellDef="let validation"> {{ validation.upload.user.username }} </td>
             </ng-container>
 
             <ng-container matColumnDef="state" >
-                <th mat-header-cell *matHeaderCellDef>
-                    état
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by state">
+                    {{ 'VALIDATION.STATE' | translate }}
                 </th>
                 <td mat-cell *matCellDef="let validation" [ngSwitch]="validation.final_validation">
                     <span *ngSwitchCase="validationStatus.VALIDATED_OK" class="validation-ok" #tooltip="matTooltip"
@@ -47,7 +47,7 @@
 
             <ng-container matColumnDef="uploaded_at">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by id">
-                    téléversé le
+                    {{ 'VALIDATION.UPLOAD_DATE' | translate }}
                 </th>
                 <td mat-cell *matCellDef="let validation"> {{ toDate(validation.upload.uploaded_at) }} </td>
             </ng-container>
@@ -55,23 +55,23 @@
 
             <ng-container matColumnDef="group">
                 <th mat-header-cell *matHeaderCellDef>
-                    groupe(s) de validation
+                    {{ 'VALIDATION.GROUPS' | translate }}
                 </th>
                 <td mat-cell *matCellDef="let validation">
                     <span *ngFor="let gs of validation.groupStates" [ngSwitch]="gs.state">
                         <span *ngSwitchCase="validationStatus.VALIDATED_OK" class="validation-ok" #tooltip="matTooltip"
                             matTooltip="{{ gs.state }}" matTooltipPosition="right">
-                            {{gs.description}}
+                            {{gs.name}}
                             <mat-icon fontIcon="done"></mat-icon>
                         </span>
                         <span *ngSwitchCase="validationStatus.VALIDATED_NOK" class="validation-nok" #tooltip="matTooltip"
                             matTooltip="{{ gs.state }}" matTooltipPosition="right">
-                            {{gs.description}}
+                            {{gs.name}}
                             <mat-icon fontIcon="block"></mat-icon>
                         </span>
                         <span *ngSwitchDefault class="validation-default" #tooltip="matTooltip"
                             matTooltip="{{ gs.state }}" matTooltipPosition="right">
-                            {{gs.description}}
+                            {{gs.name}}
                             <mat-icon fontIcon="pending"></mat-icon>
                         </span>
                     </span>
@@ -80,7 +80,7 @@
 
             <ng-container matColumnDef="file_count">
                 <th mat-header-cell *matHeaderCellDef>
-                    nombre de fichier(s)
+                    {{ 'VALIDATION.FILE_NUMBER' | translate }}
                 </th>
                 <td mat-cell *matCellDef="let validation"> 
                     <span *ngIf="validation.upload.file_count > 0">{{ validation.upload.file_count }} </span>
@@ -90,7 +90,7 @@
 
             <ng-container matColumnDef="edit">
                 <th mat-header-cell *matHeaderCellDef>
-                    valider/voir?
+                    {{ 'VALIDATION.VALID_OR_SEE' | translate }}
                 </th>
                 <td mat-cell *matCellDef="let validation">
                     <button mat-raised-button color="primary" [disabled]="(validation.upload.file_count <= 0)" (click)="editOrSeeValidation(validation)">
@@ -114,6 +114,6 @@
 
     </div>
     <div *ngIf="allDataLoaded && dataSource.data.length <= 0">
-        <h1>Il n'y a pas de validation</h1>
+        <h1>{{ 'VALIDATION.EMPTY' | translate }}</h1>
     </div>
 </div>

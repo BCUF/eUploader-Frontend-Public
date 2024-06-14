@@ -4,31 +4,30 @@
 
         <mat-stepper linear #stepper>
             <mat-step [completed]="filesUploaded" [editable]="upload.status !== endStatus">
-                <ng-template matStepLabel>Ajouter des fichiers</ng-template>
+                <ng-template matStepLabel>{{ 'UPLOAD.ADD_FILES' | translate }}</ng-template>
                 <ng-template matStepContent>
                     <app-upload-files (fileUploadStepCompletedEvent)="handleFileUploadStepComplete($event)" [pipeline]="pipeline" [upload]="upload"></app-upload-files>
                 
                     <div class="next-1-btn">
-                        <button mat-raised-button color="primary" [disabled]="!filesUploaded" (click)="setFileUploadedStatusAndGoNext()">Suivant</button>
+                        <button mat-raised-button color="primary" [disabled]="!filesUploaded" (click)="setFileUploadedStatusAndGoNext()">{{ 'COMMON.NEXT' | translate }}</button>
                     </div>
                 </ng-template>
             </mat-step>
-       
 
             <mat-step *ngIf="pipeline" [completed]="metadataUploaded">
-                <ng-template matStepLabel>Ajouter des métadonnées</ng-template>
+                <ng-template matStepLabel>{{ 'UPLOAD.ADD_METADATAS' | translate }}</ng-template>
                 <ng-template matStepContent>
                     <app-upload-metadata *ngIf="stepper.selectedIndex === 1" (metadataStepCompletedEvent)="handleMetadataStepComplete($event)" [pipeline]="pipeline" [uploadId]="upload.id"></app-upload-metadata>
                 
                     <div class="next-2-btn">
-                        <button mat-raised-button color="primary" matStepperPrevious>Précédent</button>
-                        <button mat-raised-button color="primary" [disabled]="!metadataUploaded"  (click)="finishStep()">Terminer</button>
+                        <button mat-raised-button color="primary" matStepperPrevious>{{ 'COMMON.PREVIOUS' | translate }}</button>
+                        <button mat-raised-button color="primary" [disabled]="!metadataUploaded"  (click)="finishStep()">{{ 'COMMON.TERMINATE' | translate }}</button>
                     </div>
                 </ng-template >
             </mat-step>
 
             <mat-step>
-                <ng-template matStepLabel>Terminé</ng-template>
+                <ng-template matStepLabel>{{ 'COMMON.TERMINATE' | translate }}</ng-template>
                 <ng-template matStepContent>
                     <app-upload-end></app-upload-end>
                 </ng-template>

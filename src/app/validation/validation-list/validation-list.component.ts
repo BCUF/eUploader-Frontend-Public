@@ -22,7 +22,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { Page } from 'src/app/data/page';
 import { User } from 'src/app/data/user';
 import { Validation, ValidationStatus, GroupStates } from 'src/app/data/validation';
-import { ValidatorGroups } from 'src/app/data/validator-groups';
+import { Group } from 'src/app/data/group';
 import { UserService } from 'src/app/services/user.service';
 import { ValidationService } from 'src/app/services/validation.service';
 
@@ -39,6 +39,8 @@ export class ValidationListComponent implements OnInit {
     page: Page;
 
     validationStatus: any;
+
+    filterValue: string;
 
     validationList: Validation[];
 
@@ -96,13 +98,14 @@ export class ValidationListComponent implements OnInit {
 
                 validation.workflow.validator_groups.forEach(function (group){
                     const gs = new GroupStates();
+                    gs.name = group.name;
                     gs.description = group.description;
-                    map.set(group.group, gs);
+                    map.set(group.id, gs);
                 });
 
-                let group = validation.group as ValidatorGroups
+                let group = validation.group as Group
                 
-                let gs = map.get(group.group);
+                let gs = map.get(group.id);
                 if(gs){
                     gs.state = validation.state;
                 }
@@ -120,7 +123,7 @@ export class ValidationListComponent implements OnInit {
                 if (validation.groupStates.every(elem => elem.state === ValidationStatus.VALIDATED_OK)){
                     validation.final_validation = ValidationStatus.VALIDATED_OK;
                 }
-                else if (validation.groupStates.every(elem => elem.state === ValidationStatus.VALIDATED_NOK)){
+                else if (validation.groupStates.some(elem => elem.state === ValidationStatus.VALIDATED_NOK)){
                     validation.final_validation = ValidationStatus.VALIDATED_NOK;
                 }
                 else{
@@ -190,6 +193,14 @@ export class ValidationListComponent implements OnInit {
             }
             else{
                 this.ordering = "upload__uploaded_at";
+            }
+        }
+        if(sortState.active == "state"){
+            if(sortState.direction == "desc"){
+                this.ordering = "-state";
+            }
+            else{
+                this.ordering = "state";
             }
         }
         this.getValidations();

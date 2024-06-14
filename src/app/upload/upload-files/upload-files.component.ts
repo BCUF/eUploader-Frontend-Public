@@ -12,8 +12,7 @@
 * If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
-import {Injectable} from '@angular/core';
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter, Injectable } from '@angular/core';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { FileService } from 'src/app/services/file.service';
 import { Upload, Status } from 'src/app/data/upload';
@@ -31,9 +30,9 @@ import { PageEvent } from '@angular/material/paginator';
 import { FileToSha256, Utils } from 'src/app/utils/utils';
 import { Dialog, DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/utils/confirm-dialog/confirm-dialog.component';
-import { LoadingDialogComponent, DialogSpinnerComponent } from 'src/app/utils/loading-dialog/loading-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import CryptoES from 'crypto-es';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -85,13 +84,14 @@ export class UploadFilesComponent implements OnInit {
         this.dataSource.sort = this.sort;
     }
 
-    pageSize = 10;
-    pageSizeOptions: number[] = [5, 10, 25, 100];
+    pageSize = 50;
+    pageSizeOptions: number[] = [5, 10, 25, 50, 100];
     pageEvent: PageEvent;
 
     constructor(private fileService: FileService, private uploadService: UploadService,
         private route: ActivatedRoute, private userService: UserService, private pipelineService: PipelineService, 
-        private _liveAnnouncer: LiveAnnouncer, private router: Router, public dialog: Dialog, private matDialog: MatDialog) { }
+        private _liveAnnouncer: LiveAnnouncer, private router: Router, public dialog: Dialog, 
+        private matDialog: MatDialog, public translate: TranslateService) { }
 
     ngOnInit(): void {
 
@@ -169,6 +169,7 @@ export class UploadFilesComponent implements OnInit {
 
         const files = e.currentTarget.files;
         for (let i = 0; i < files.length; i++) {
+            console.log(files[i]);
             if (this.isValid(files[i])) {
                 this.wrapFile(files[i]);
                 // disable NEXT button if files added after can go next event
@@ -183,6 +184,7 @@ export class UploadFilesComponent implements OnInit {
 
     droppedFiles(files: File[]): void {
         for (let i = 0; i < files.length; i++) {
+            console.log(files[i]);
             if (this.isValid(files[i])) {
                 this.wrapFile(files[i]);
                 // disable NEXT button if files added after can go next event
@@ -287,7 +289,7 @@ export class UploadFilesComponent implements OnInit {
                 (err: any) => {
                     // this.progressInfos[idx].value = 0;
                     file.progression = 0;
-                    const msg = `Could not upload the file: ${file.name}`;
+                    const msg = `${this.translate.instant('ERROR.COULD_NOT_UPLOAD')} ${file.name}`;
                     this.errorDialog(msg)
                 });
         }
@@ -305,7 +307,7 @@ export class UploadFilesComponent implements OnInit {
         
         // check if file is already in the list
         if (this.allFiles.find(f => f.name == file.name)) {
-            let message = `Le nom du fichier ${file.name} se trouve déjà dans la liste`;
+            let message = `${this.translate.instant('ERROR.FILE_ALREADY_EXISTS')} ${file.name}`;
             this.errorDialog(message);
             file_not_exists = false;
         }
@@ -317,14 +319,14 @@ export class UploadFilesComponent implements OnInit {
                 size_is_valid = true;
             }
             else {
-                let message = `La taille du fichier ${file.name} dépasse la taille maximale de ${Utils.formatBytes(this.pipeline.max_size_in_byte)}`
+                let message = `${this.translate.instant('ERROR.MAX_SIZE_REACHED.A')} ${file.name} ${this.translate.instant('ERROR.MAX_SIZE_REACHED.B')} ${Utils.formatBytes(this.pipeline.max_size_in_byte)}`;
                 this.errorDialog(message);
             }
             if (this.allowed_mimes.includes(file.type)) {
                 type_is_valid = true;
             }
             else {
-                let message = `Le type du fichier ${file.name} n'est pas dans ${this.allowed_mimes.toString().split(',').join(', ')}`
+                let message = `${this.translate.instant('ERROR.MAX_SIZE_REACHED.A')} ${file.name} ${this.translate.instant('ERROR.WRONG_TYPE')} ${this.allowed_mimes.toString().split(',').join(', ')}`
                 this.errorDialog(message);
             }
         }
@@ -356,9 +358,14 @@ export class UploadFilesComponent implements OnInit {
     }
 
     confirmDialog(): void {
-        const message = "Passez à l'étape suivante?";
     
-        const dialogData = new ConfirmDialogModel("Confirmation", message, "Suivant", "Continuer d'ajouter des fichiers", "");
+        const dialogData = new ConfirmDialogModel(
+            this.translate.instant('FORM.CONFIRM'), 
+            this.translate.instant('FORM.GO_NEXT_STEP'), 
+            this.translate.instant('COMMON.NEXT'), 
+            this.translate.instant('FORM.CONTINUE_TO_ADD'), 
+            ""
+        );
     
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
             disableClose: true,
@@ -383,9 +390,15 @@ export class UploadFilesComponent implements OnInit {
     }
 
     deleteDialog(file: FileWrapper): void {
-        const message = `Voulez-vous effacer le fichier ${file.name}?`;
+        const message = `${this.translate.instant('UPLOAD.WANT_TO_DELETE')} ${file.name}?`;
     
-        const dialogData = new ConfirmDialogModel("Confirmation", message, "Effacer", "Annuler", "");
+        const dialogData = new ConfirmDialogModel(
+            this.translate.instant('FORM.CONFIRM'), 
+            message, 
+            this.translate.instant('UPLOAD.DELETE'),
+            this.translate.instant('FORM.CANCEL'), 
+            ""
+        );
     
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
             height: '400px',
@@ -404,7 +417,7 @@ export class UploadFilesComponent implements OnInit {
 
     errorDialog(message: string): void {
     
-        const dialogData = new ConfirmDialogModel("Erreur", message, "OK", "", "");
+        const dialogData = new ConfirmDialogModel(this.translate.instant('ERROR.ERROR'), message, "OK", "", "");
     
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
             height: '400px',

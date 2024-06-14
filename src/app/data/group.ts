@@ -12,13 +12,8 @@
 * If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { PipelineBase } from "./pipeline";
-import { Group } from "./group";
-
-export class Workflow {
+export class Group {
     id: number;
     name: string;
     description: string;
-    pipeline: PipelineBase;
-    validator_groups: Group[];
 }

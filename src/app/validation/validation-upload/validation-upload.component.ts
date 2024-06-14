@@ -34,6 +34,7 @@ import { MetadataFormsField } from 'src/app/data/metadata-forms-field';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-validation-upload',
@@ -81,13 +82,13 @@ export class ValidationUploadComponent implements OnInit {
     }
 
     pageSize = 10;
-    pageSizeOptions: number[] = [5, 10, 25, 100];
+    pageSizeOptions: number[] = [5, 10, 25, 50, 100];
     pageEvent: PageEvent;
 
     constructor(private _liveAnnouncer: LiveAnnouncer, public dialog: Dialog, private uploadService: UploadService, 
         private fileService: FileService, private pipelineService: PipelineService, 
         private validationService: ValidationService, private route: ActivatedRoute, 
-        private router: Router, private userService: UserService, private snackBar: MatSnackBar) { }
+        private router: Router, private userService: UserService, private snackBar: MatSnackBar, public translate: TranslateService) { }
 
     ngOnInit(): void {
         this.init();
@@ -115,7 +116,7 @@ export class ValidationUploadComponent implements OnInit {
                                     this.errorMessage = error.error.non_field_errors.join(", ");
                                 }
                                 else{
-                                    this.errorMessage = "Unknown error";
+                                    this.errorMessage = this.translate.instant('ERROR.UNKNOWN');
                                 }
                             }
                         });
@@ -126,9 +127,15 @@ export class ValidationUploadComponent implements OnInit {
                         this.errorMessage = error.error.non_field_errors.join(", ");
                     }
                     else{
-                        this.errorMessage = "Unknown error";
+                        this.errorMessage = this.translate.instant('ERROR.UNKNOWN');
                     }
                 }
+            });
+        });
+
+        this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+            this.pipelineService.getOne(this.validation.workflow.pipeline.id).subscribe((data: Pipeline) => {
+                this.pipeline = { ...data };
             });
         });
     }
@@ -167,7 +174,7 @@ export class ValidationUploadComponent implements OnInit {
                     this.errorMessage = error.error.non_field_errors.join(", ");
                 }
                 else{
-                    this.errorMessage = "Unknown error";
+                    this.errorMessage = this.translate.instant('ERROR.UNKNOWN');
                 }
             }
         });
@@ -215,7 +222,7 @@ export class ValidationUploadComponent implements OnInit {
                         this.errorMessage = error.error.non_field_errors.join(", ");
                     }
                     else{
-                        this.errorMessage = "Unknown error";
+                        this.errorMessage = this.translate.instant('ERROR.UNKNOWN');
                     }
                 }
             });
@@ -235,7 +242,7 @@ export class ValidationUploadComponent implements OnInit {
                 this.updateFileTable();
                 this.uploadIsValid = true;
 
-                this.snackBar.open('Formulaire sauvegardé', 'close', {
+                this.snackBar.open(this.translate.instant('VALIDATION.SAVED'), 'close', {
                     duration: 10000,
                 });
             }
@@ -322,7 +329,7 @@ export class ValidationUploadComponent implements OnInit {
                     }
                 }
             }
-           
+
             else if(field.type === "CHECKBOX"){
                 if(field.required && this.canEdit(field)){
                     if (values.some(e => e.key == field.key)) {
